@@ -2,19 +2,19 @@
 // Created by TUO8HC on 9/21/2025.
 //
 
-#ifndef EX01_CAT_H
-#define EX01_CAT_H
+#ifndef EX01_DOG_H
+#define EX01_DOG_H
 #include "Animal.h"
 #include "Brain.h"
 
-// Concrete products.
-class Cat : public Animal{
+// Concrete products
+class Dog : public Animal{
 public:
-    Cat();
-    ~Cat();
+    Dog();
+    ~Dog();
 
-    Cat(Cat const&);
-    Cat& operator=(Cat const&);
+    Dog(Dog const&);
+    Dog& operator=(Dog const&);
 
     void makeSound() const noexcept override;
     std::unique_ptr<Animal> clone() const override;
@@ -27,4 +27,4 @@ private:
 };
 
 
-#endif //EX01_CAT_H
+#endif //EX01_DOG_

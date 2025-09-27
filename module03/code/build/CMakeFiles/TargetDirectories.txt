@@ -1,0 +1,3 @@
+C:/git/personal/cpp/module03/code/build/CMakeFiles/main.dir
+C:/git/personal/cpp/module03/code/build/CMakeFiles/edit_cache.dir
+C:/git/personal/cpp/module03/code/build/CMakeFiles/rebuild_cache.dir
