@@ -1,0 +1,8 @@
+
+- Generate Cmake artifacts/project
+C:\toolbase\cmake\3.31.2\bin\cmake.exe  -G "MinGW Makefiles" -B build -DCMAKE_BUILD_TYPE=DEBUG
+- Compile the source code
+C:\toolbase\cmake\3.31.2\bin\cmake.exe --build ./build
+- Refer to launch.json file to enable option debug by launch
+
+

@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug my_app",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "C:/git/personal/cpp/module03/code/build/main.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "C:/git/personal/cpp/module03/code/build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/toolbase/mingw/test25_comp_8.1.0_testversion/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

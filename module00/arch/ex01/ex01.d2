@@ -1,0 +1,36 @@
+PhoneBook: {
+
+  shape: class
+
+
+  Contact: "[8]vector"
+
+  +ADD(): ""
+  +SEARCH(): ""
+  +EXIT(): ""
+
+}
+
+Contact: {
+
+  shape: class
+
+- firsrName: "string"
+- lastName:  "string"
+- nickName:  "string"
+- phoneNumber: "string"
+- DarkestSecret: "string"
+
+
+  -SET_FirstName(a uint64): (x, y int)
+  -GET_FirstName(a uint64) const: (x, y int)
+  -SET_LastName(a uint64): (x, y int)
+  -GET_LastName(a uint64) const: (x, y int)
+  -SET_NickName(a uint64): (x, y int)
+  -SET_PhoneNumber(a uint64): (x, y int)
+  -SET_DarkestSecret(a uint64): (x, y int)
+
+}
+
+
+PhoneBook <- Contact
