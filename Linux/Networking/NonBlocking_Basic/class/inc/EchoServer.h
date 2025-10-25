@@ -8,14 +8,20 @@
 
 #include "Epoll.h"
 #include "Socket.h"
+#include "NetworkUtils.h"
 #include <netinet/in.h>
+
+constexpr int MAX_NUMBERS = 1024;
 
 class EchoServer {
 public:
     EchoServer();
-    ~EchoServer();
+    ~EchoServer() = default;
 
-    void Start();
+    EchoServer(const EchoServer&) = delete;
+    EchoServer& operator=(const EchoServer&) = delete;
+
+    void Start(int port);
     void Stop();
 private:
     Socket listen_socket_;
