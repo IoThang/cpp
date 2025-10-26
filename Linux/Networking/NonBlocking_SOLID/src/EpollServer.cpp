@@ -29,13 +29,15 @@ void networking::EpollServer::run() {
                 cleanupFd(fd);
                 continue;
             }
-
+            //  Only handle accept the connections
             if (fd == server_socket_.get_fd()) {
                 server_handler_->handle(fd, ev);
             }
+            //  Only handler stdin from key broad
             else if (fd == STDIN_FILENO) {
                 stdin_handler_->handle(fd, ev);
             }
+            //  Only handle receive data from client
             else {
                 auto it = client_handlers_.find(fd);
                 if (it != client_handlers_.end()) {

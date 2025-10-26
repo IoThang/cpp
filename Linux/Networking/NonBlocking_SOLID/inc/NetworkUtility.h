@@ -79,17 +79,25 @@ inline int networking::NetworkUtility::connect(int sock, const sockaddr *addr, s
 
 inline ssize_t networking::NetworkUtility::read(int fd, void *buffer, size_t count) {
     int bytes_read = ::read(fd, buffer, count);
-    if (bytes_read < 0) {
-        throw std::runtime_error("[ERROR] Read failed" + std::to_string(errno));
-    }
+    /**
+     * Shouldn't check == -1 here
+     * Since in epoll mode, -1 but errno = EAGAIN or EWOULDBLOCK => it's still valid, shouldn't throw error here
+     */
+    // if (bytes_read < 0) {
+    //     throw std::runtime_error("[ERROR] Read failed" + std::to_string(errno));
+    // }
     return bytes_read;
 }
 
 inline ssize_t networking::NetworkUtility::write(int fd, void *buffer, size_t count) {
     int bytes_write = ::write(fd, buffer, count);
-    if (bytes_write < 0) {
-        throw std::runtime_error("[ERROR] Write failed" + std::to_string(errno));
-    }
+    /**
+     * Shouldn't check == -1 here
+     * Since in epoll mode, -1 but errno = EAGAIN or EWOULDBLOCK => it's still valid, shouldn't throw error here
+     */
+    // if (bytes_write < 0) {
+    //     throw std::runtime_error("[ERROR] Write failed" + std::to_string(errno));
+    // }
     return bytes_write;
 }
 

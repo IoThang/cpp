@@ -12,6 +12,18 @@ void networking::ServerStdinHandler::handle(int fd, event_t events) {
     std::getline(std::cin, line);
     if (line.empty()) return;
 
+    if (line == "exit") {
+        std::cout << "[Server] Shutting down all clients and exiting." << std::endl;
+        // Cleanup all clients
+        for (const auto& [fd, _] : client_handlers_) {
+            epoll_.remove(fd);
+            NetworkUtility::close(fd);
+            std::cout << "[Server] Cleaned up fd=" << fd << std::endl;
+        }
+        client_handlers_.clear();
+        exit(0);
+    }
+
     // Parse: If starts with "@fd:", send to specific; else broadcast
     size_t pos = line.find("@");
     if (pos == 0 && line.size() > 1) {
