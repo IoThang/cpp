@@ -1,0 +1,114 @@
+@startuml NonBlockingNetworkUML
+
+!define INTERFACE_COLOR <<stereotype>>
+
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+title UML Class Diagram: Non-Blocking TCP Network with Epoll
+
+' Interfaces
+interface ISocket << (I,LightBlue) >> {
+    + int get_fd() const
+    + int bind(int port)
+    + int listen(int backlog)
+    + int accept(sockaddr_in&, socklen_t&)
+    + int connect(string, int)
+    + int send(string)
+    + int recv(string&)
+    + void close()
+    + void set_nonblocking(bool)
+}
+
+interface IEventHandler << (I,LightBlue) >> {
+    + void handleEvent(int fd, uint32_t events)
+}
+
+' Classes
+class TCPSocket {
+    - int sockfd_
+    + TCPSocket()
+    + ~TCPSocket()
+    + int create()
+    + int get_fd() const
+    + int bind(int port)
+    + int listen(int backlog)
+    + int accept(sockaddr_in&, socklen_t&)
+    + int connect(string, int)
+    + int send(string)
+    + int recv(string&)
+    + void close()
+    + void set_nonblocking(bool)
+    + void set_fd(int fd)
+}
+
+class SocketFactory {
+    + static unique_ptr<ISocket> createTCP()
+}
+
+class ClientHandler {
+    - string buffer_
+    - unique_ptr<ISocket> socket_
+    + ClientHandler(unique_ptr<ISocket>)
+    + void handleEvent(int fd, uint32_t events)
+    + int get_fd() const
+}
+
+class EpollManager {
+    - int epoll_fd_
+    - unordered_map<int, unique_ptr<IEventHandler>> handlers_
+    + EpollManager()
+    + ~EpollManager()
+    + void add_fd(int fd, uint32_t events, unique_ptr<IEventHandler>)
+    + void modify_fd(int fd, uint32_t events)
+    + void remove_fd(int fd)
+    + void wait_and_notify(int timeout_ms = -1)
+}
+
+class NonBlockingServer {
+    - unique_ptr<ISocket> listen_socket_
+    - unique_ptr<EpollManager> epoll_mgr_
+    - int port_
+    + NonBlockingServer(int port, unique_ptr<ISocket>, unique_ptr<EpollManager>)
+    + void run()
+}
+
+class NonBlockingClient {
+    - unique_ptr<ISocket> socket_
+    - unique_ptr<EpollManager> epoll_mgr_
+    - bool connected_
+    - string pending_send_
+    + NonBlockingClient(unique_ptr<ISocket>, unique_ptr<EpollManager>)
+    + void connect(string host, int port)
+    + void send(string msg)
+    + string recv()
+    + void run_once()
+    + void close()
+}
+
+' Relationships
+TCPSocket ..|> ISocket : implements
+ClientHandler ..|> IEventHandler : implements
+
+NonBlockingServer *-- "1" ISocket : listen_socket_
+NonBlockingServer *-- "1" EpollManager : epoll_mgr_
+NonBlockingServer ..> EpollManager : uses
+NonBlockingServer ..> TCPSocket : creates (in run())
+NonBlockingServer ..> ClientHandler : creates (in run())
+
+NonBlockingClient *-- "1" ISocket : socket_
+NonBlockingClient *-- "1" EpollManager : epoll_mgr_
+NonBlockingClient ..> EpollManager : uses
+
+EpollManager *-- "*" IEventHandler : handlers_
+EpollManager ..> ClientHandler : notifies (Observer)
+
+ClientHandler *-- "1" ISocket : socket_
+ClientHandler ..> ISocket : uses (recv/send)
+
+SocketFactory ..> TCPSocket : creates
+
+@enduml

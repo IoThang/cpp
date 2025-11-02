@@ -4,8 +4,8 @@
 
 #include "../inc/ServerStdinHandler.h"
 
-networking::ServerStdinHandler::ServerStdinHandler(Epoll& epoll, std::unordered_map<int, std::unique_ptr<IEventHandler>>& clients)
-    : epoll_(epoll), client_handlers_(clients) {}
+networking::ServerStdinHandler::ServerStdinHandler(Epoll& epoll, std::unordered_map<int, std::unique_ptr<IEventHandler>>& clients, ThreadPool& threadPool)
+    : epoll_(epoll), client_handlers_(clients), pool_(threadPool) {}
 
 void networking::ServerStdinHandler::handle(int fd, event_t events) {
     std::string line;

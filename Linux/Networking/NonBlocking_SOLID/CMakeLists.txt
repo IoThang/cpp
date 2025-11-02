@@ -21,6 +21,12 @@ add_executable(server
         src/ServerStdinHandler.cpp
         src/EpollServer.cpp
         src/server_main.cpp
+        inc/DefaultTaskProcessor.h
+        inc/Task.h
+        src/Task.cpp
+        src/Thread.cpp
+        src/ThreadPool.cpp
+        src/DefaultTaskProcessor.cpp
 )
 
 add_executable(client
@@ -31,6 +37,14 @@ add_executable(client
         src/ClientStdinHandler.cpp
         src/EpollClient.cpp
         src/client_main.cpp
+        inc/DefaultTaskProcessor.h
+        inc/Task.h
+        src/Task.cpp
+        inc/Thread.h
+        src/Thread.cpp
+        inc/ThreadPool.h
+        src/ThreadPool.cpp
+        src/DefaultTaskProcessor.cpp
 )
 
 # Optionally, specify include directories (uncomment if you have header files)

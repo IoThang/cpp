@@ -9,17 +9,22 @@
 #include <iostream>
 #include "Epoll.h"
 #include "IEventHandler.h"
+#include "ThreadPool.h"
 
 namespace networking {
     class ServerHandler : public IEventHandler{
     public:
-        explicit ServerHandler(Epoll& epoll, std::unordered_map<int, std::unique_ptr<IEventHandler>>& clients, int server_fd);
+        explicit ServerHandler(Epoll& epoll, std::unordered_map<int, std::unique_ptr<IEventHandler>>& clients, int server_fd, ThreadPool& thread_pool, std::unordered_map<int, std::string>& client_map);
 
         void handle(int fd, event_t events) override;
     private:
         Epoll& epoll_;
         std::unordered_map<int, std::unique_ptr<IEventHandler>>& client_handlers_;
         int server_fd_;
+
+        ThreadPool& pool_;
+        std::unordered_map<int, std::string> client_map_;
+        std::shared_mutex client_mutex_;
     };
 }
 

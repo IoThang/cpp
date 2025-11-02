@@ -4,12 +4,14 @@
 
 #include "../inc/EpollServer.h"
 
-networking::EpollServer::EpollServer(int port) : port_(port), server_socket_(AF_INET, SOCK_STREAM, IPPROTO_TCP) {
+networking::EpollServer::EpollServer(int port) : port_(port),
+    server_socket_(AF_INET, SOCK_STREAM, IPPROTO_TCP),
+    pool_(POOL_SIZE, std::make_unique<DefaultTaskProcessor>(client_map_)) {
     server_socket_.bindAndListen(port_);
     epoll_.add(server_socket_.get_fd(), EPOLLIN);
 
-    server_handler_ = std::make_unique<ServerHandler>(epoll_, client_handlers_, server_socket_.get_fd());
-    stdin_handler_ = std::make_unique<ServerStdinHandler>(epoll_, client_handlers_);
+    server_handler_ = std::make_unique<ServerHandler>(epoll_, client_handlers_, server_socket_.get_fd(), pool_, client_map_);
+    stdin_handler_ = std::make_unique<ServerStdinHandler>(epoll_, client_handlers_, pool_);
     epoll_.add(STDIN_FILENO, EPOLLIN);
     std::cout << "[Server] Listening on port " << port << std::endl;
     std::cout << "[Server] Usage: Enter 'msg' for broadcast, or '@fd:msg' for specific (e.g., @5:hello)" << std::endl;
@@ -26,6 +28,8 @@ void networking::EpollServer::run() {
             event_t ev = events[i].events;
             if (ev & (EPOLLERR | EPOLLHUP)) {
                 std::cerr << "[ERROR] Error/HUP on fd " << fd << std::endl;
+                pool_.enqueue({TaskType::Cleanup, fd});
+                //  Server (reactor): cleanup server side
                 cleanupFd(fd);
                 continue;
             }

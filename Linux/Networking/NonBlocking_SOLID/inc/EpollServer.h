@@ -12,6 +12,7 @@
 #include "IEventHandler.h"
 #include "../inc/ServerHandler.h"
 #include "../inc/ServerStdinHandler.h"
+#include "ThreadPool.h"
 
 namespace networking {
     class EpollServer {
@@ -25,7 +26,12 @@ namespace networking {
         std::unordered_map<int, std::unique_ptr<networking::IEventHandler>> client_handlers_;
         std::unique_ptr<IEventHandler> server_handler_;
         std::unique_ptr<IEventHandler> stdin_handler_;
+        // Compose pool
+        ThreadPool pool_;
+        // Shared state for processor
+        std::unordered_map<int, std::string> client_map_;
 
+        static constexpr size_t POOL_SIZE = 5;
         void cleanupFd(int fd);
     };
 }
