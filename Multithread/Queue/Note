@@ -1,0 +1,3 @@
+- Bounded queue (have capacity) => 2 condition variables: 1 not_empty and 1 not_full
+- Reduce lock contention => Two-lock queue (separate head/tail locks): 1 mutex for head and 1 for tail
+- Lock-free queue => Michael and Scott (MS) algorithm (CAS based)
