@@ -10,8 +10,8 @@
 #include "Socket.h"
 #include "Epoll.h"
 #include "IEventHandler.h"
-#include "../inc/ServerHandler.h"
-#include "../inc/ServerStdinHandler.h"
+#include "ServerHandler.h"
+#include "ServerStdinHandler.h"
 #include "ThreadPool.h"
 
 namespace networking {
@@ -28,8 +28,7 @@ namespace networking {
         std::unique_ptr<IEventHandler> stdin_handler_;
         // Compose pool
         ThreadPool pool_;
-        // Shared state for processor
-        std::unordered_map<int, std::string> client_map_;
+        //  Compose client registstr
 
         static constexpr size_t POOL_SIZE = 5;
         void cleanupFd(int fd);

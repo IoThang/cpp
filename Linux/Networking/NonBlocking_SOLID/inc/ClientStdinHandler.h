@@ -7,6 +7,7 @@
 #include "IEventHandler.h"
 #include "Epoll.h"
 #include "NetworkUtility.h"
+#include <string>
 
 namespace networking {
     class ClientStdinHandler : public IEventHandler{
