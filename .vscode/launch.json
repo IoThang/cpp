@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug my_app",
+            "name": "Debug my_app windows",
             "type": "cppdbg",
             "request": "launch",
             "program": "C:/git/personal/cpp/module03/code/build/main.exe",
@@ -13,6 +13,26 @@
             "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerPath": "C:/toolbase/mingw/test25_comp_8.1.0_testversion/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Debug my_app linux",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/tuo8hc/working/git/cpp/Linux/Networking/NonBlocking_SOLID/build/server",
+            "args": ["1234"],
+            "stopAtEntry": false,
+            "cwd": "/home/tuo8hc/working/git/cpp/Linux/Networking/NonBlocking_SOLID/build/CMakeFiles",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
