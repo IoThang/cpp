@@ -19,5 +19,5 @@ void networking::ClientSocketHandler::handle(int fd, networking::event_t events)
         exit(0);
     }
     buffer[bytes_read] = '\0';
-    std::cout << "[Server]: " << buffer;  // No endl for prompt
+    std::cout << buffer;  // No endl for prompt
 }

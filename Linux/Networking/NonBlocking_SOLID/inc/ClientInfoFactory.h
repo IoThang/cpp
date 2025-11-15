@@ -11,10 +11,11 @@ namespace networking {
 
     class ClientInfoFactory {
     public:
-        std::unique_ptr<ClientInfo> create(rint fd);
+        static std::unique_ptr<ClientInfo> create(int fd);
+        static void updateRoom(ClientInfo& clientInfo,const std::string& newRoom);
     };
 }
 
 
 
-#endif //EX01_CLIENTINFOFACTORY_H
+#endif //EX01_CLIENTINFOFACTORY_HM

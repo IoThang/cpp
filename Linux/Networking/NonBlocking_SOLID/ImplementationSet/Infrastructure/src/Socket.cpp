@@ -8,6 +8,7 @@
 networking::Socket::Socket(int fd) : fd_(fd) {
     if (fd_ >= 0) {
         NetworkUtility::setNonBlocking(fd_);
+        NetworkUtility::setSockOpt(fd_, SO_REUSEADDR | SO_REUSEPORT);
     }
 }
 

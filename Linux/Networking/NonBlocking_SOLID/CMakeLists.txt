@@ -14,37 +14,41 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Add the executable
 add_executable(server
-        src/Socket.cpp
-        src/Epoll.cpp
-        src/ClientHandler.cpp
-        src/ServerHandler.cpp
-        src/ServerStdinHandler.cpp
-        src/EpollServer.cpp
-        src/server_main.cpp
+        ImplementationSet/Infrastructure/src/Socket.cpp
+        ImplementationSet/Infrastructure/src/Epoll.cpp
+        ImplementationSet/Server/src/ClientHandler.cpp
+        ImplementationSet/Server/src/ServerHandler.cpp
+        ImplementationSet/Server/src/ServerStdinHandler.cpp
+        ImplementationSet/Server/src/EpollServer.cpp
+        ImplementationSet/Server/src/server_main.cpp
         inc/DefaultTaskProcessor.h
         inc/Task.h
-        src/Task.cpp
-        src/Thread.cpp
-        src/ThreadPool.cpp
-        src/DefaultTaskProcessor.cpp
+        ImplementationSet/Infrastructure/src/Task.cpp
+        ImplementationSet/Infrastructure/src/Thread.cpp
+        ImplementationSet/Infrastructure/src/ThreadPool.cpp
+        ImplementationSet/Infrastructure/src/DefaultTaskProcessor.cpp
+        ImplementationSet/Client/src/ClientRegistry.cpp
+        ImplementationSet/Client/src/ClientInfo.cpp
+        inc/ClientInfoFactory.h
+        ImplementationSet/Client/src/ClientInfoFactory.cpp
+        ImplementationSet/Server/src/ClientHandler.cpp
 )
 
 add_executable(client
-        src/Socket.cpp
-        src/Epoll.cpp
-        src/ClientHandler.cpp
-        src/ClientSocketHandler.cpp
-        src/ClientStdinHandler.cpp
-        src/EpollClient.cpp
-        src/client_main.cpp
-        inc/DefaultTaskProcessor.h
+        ImplementationSet/Infrastructure/src/Socket.cpp
+        ImplementationSet/Infrastructure/src/Epoll.cpp
+        ImplementationSet/Client/src/ClientSocketHandler.cpp
+        ImplementationSet/Client/src/ClientStdinHandler.cpp
+        ImplementationSet/Client/src/EpollClient.cpp
+        ImplementationSet/Client/src/client_main.cpp
         inc/Task.h
-        src/Task.cpp
+        ImplementationSet/Infrastructure/src/Task.cpp
         inc/Thread.h
-        src/Thread.cpp
+        ImplementationSet/Infrastructure/src/Thread.cpp
         inc/ThreadPool.h
-        src/ThreadPool.cpp
-        src/DefaultTaskProcessor.cpp
+        ImplementationSet/Infrastructure/src/ThreadPool.cpp
+        inc/IObserver.h
+        inc/ISubject.h
 )
 
 # Optionally, specify include directories (uncomment if you have header files)

@@ -19,7 +19,10 @@ networking::EpollClient::EpollClient(std::string host, port_type port) : socket_
 
 void networking::EpollClient::run() {
     std::vector<epoll_event> events(MAX_EVENTS);
-
+    //  Force user has to enter input for first stdin. Currently I don't have an idea to put it into event loop :)
+    std::cout << "=== Before starting the chat, please enter the needed information below ===" << std::endl;
+    std::cout << "[Client] Please enter your name: " << std::endl;
+    //  Event loops
     while (true) {
         size_t num_events = epoll_.wait(events, -1);
 
@@ -28,6 +31,7 @@ void networking::EpollClient::run() {
             event_t ev = events[i].events;
             if (ev & (EPOLLERR | EPOLLHUP)) {
                 std::cerr << "[ERROR] Error/HUP on fd " << fd << std::endl;
+                exit(1);
                 break;
             }
             //  Event: From server (EPOLLIN)

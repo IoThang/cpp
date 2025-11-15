@@ -28,7 +28,8 @@ namespace networking {
         std::unique_ptr<IEventHandler> stdin_handler_;
         // Compose pool
         ThreadPool pool_;
-        //  Compose client registstr
+        //  Compose client registry
+        ClientRegistry registry_;
 
         static constexpr size_t POOL_SIZE = 5;
         void cleanupFd(int fd);

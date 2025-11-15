@@ -8,6 +8,8 @@
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
+#include <vector>
+#include <mutex>
 
 #include "ClientInfo.h"
 #include "ISubject.h"
@@ -15,17 +17,28 @@
 namespace networking {
     class ClientRegistry : public ISubject {
     public:
+        // ~ClientRegistry() override = default;
 
-        void attach(std::shared_ptr<ClientInfo> observers, std::string room) override;
-        void detach(std::shared_ptr<ClientInfo> observers, std::string room) override;
-        void notify(std::shared_ptr<ClientInfo> observers, std::string room) override;
+        //  Observer method
+        void attach(std::shared_ptr<IObserver> obs, std::string room_id) override;
+        void detach(std::shared_ptr<IObserver> obs, std::string room_id) override;
+        void notify(const RoomEvent& event, const std::string& source_name, const std::string& room_id) override;
 
-        std::unique_ptr<ClientInfo> get_client_by_fd(int fd);
+        //  Helper method
+        void insert(int fd, std::unique_ptr<ClientInfo> info);
+        void erase(int fd);
+        ClientInfo* get_client_by_fd(int fd);
+        void set_name_by_fd(const std::string& name, int fd);
+        std::string get_name_by_fd(int fd) const;
+        int get_fd_by_name(const std::string& name) const;
+        bool isNameRegistered(std::string name) const;
+        void changeRoom(int fd, const std::string& new_room);
+
     private:
-        std::unordered_map<int, std::unique_ptr<ISubject>> fd_to_info_;
-        std::unordered_map<std::string, int> name_to_fd_;
-        std::unordered_map<std::string, std::shared_ptr<IObserver>> room_observers_;
-        std::shared_mutex registry_mutex_;
+        std::unordered_map<int, std::unique_ptr<ClientInfo>> fd_to_info_;
+        std::unordered_map<int, std::string> fd_to_name_;
+        std::unordered_map<std::string, std::vector<std::shared_ptr<IObserver>> > room_observers_;
+        std::shared_mutex mutable registry_mutex_;
     };
 }
 

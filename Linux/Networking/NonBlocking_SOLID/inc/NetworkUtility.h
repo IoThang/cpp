@@ -15,6 +15,7 @@ namespace networking {
     class NetworkUtility {
     public:
         static void setNonBlocking(int fd);
+        static void setSockOpt(int fd, int option_name);
         static int createSocket(int domain, int type, int protocol);
         static void bind(int sock, const sockaddr_in* addr, socklen_t len);
         static void listen(int sock, int backlog);
@@ -35,6 +36,13 @@ inline void networking::NetworkUtility::setNonBlocking(int fd) {
     }
     if (fcntl(fd, F_SETFL, flag | O_NONBLOCK) < 0) {
         throw std::runtime_error("[ERROR] Set flag failed" + std::to_string(errno));
+    }
+}
+
+inline void networking::NetworkUtility::setSockOpt(int fd, int option_name) {
+    const int enable = 1;
+    if (setsockopt(fd, SOL_SOCKET, option_name, &enable, sizeof(int)) < 0) {
+        throw std::runtime_error("[ERROR]: Set sockopt failed" + std::to_string(errno));
     }
 }
 

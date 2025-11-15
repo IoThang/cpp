@@ -10,11 +10,12 @@
 #include "Epoll.h"
 #include "IEventHandler.h"
 #include "ThreadPool.h"
+#include "ClientRegistry.h"
 
 namespace networking {
     class ServerHandler : public IEventHandler{
     public:
-        explicit ServerHandler(Epoll& epoll, std::unordered_map<int, std::unique_ptr<IEventHandler>>& clients, int server_fd, ThreadPool& thread_pool, std::unordered_map<int, std::string>& client_map);
+        explicit ServerHandler(Epoll& epoll, std::unordered_map<int, std::unique_ptr<IEventHandler>>& clients, int server_fd, ThreadPool& thread_pool, ClientRegistry& registry);
 
         void handle(int fd, event_t events) override;
     private:
@@ -23,7 +24,7 @@ namespace networking {
         int server_fd_;
         //  Inject to assign task inside handler => Use ref
         ThreadPool& pool_;
-        std::unordered_map<int, std::string> client_map_;
+        ClientRegistry& registry_;
         std::shared_mutex client_mutex_;
     };
 }

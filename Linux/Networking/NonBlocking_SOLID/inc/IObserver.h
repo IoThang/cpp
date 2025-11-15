@@ -9,14 +9,13 @@ namespace networking {
     enum class RoomEvent {
         JOIN = 0,
         LEAVE = 1,
-        DISCONNECT = 2,
-        MESSAGE = 3
+        MESSAGE = 2
     };
 
     class IObserver {
     public:
         virtual ~IObserver() = default;
-        virtual void update(RoomEvent ev, std::string room, std::string source);
+        virtual void update(RoomEvent ev, std::string room, std::string source) = 0;
     };
 }
 

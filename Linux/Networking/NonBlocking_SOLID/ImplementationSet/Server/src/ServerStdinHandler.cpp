@@ -24,6 +24,7 @@ void networking::ServerStdinHandler::handle(int fd, event_t events) {
         exit(0);
     }
 
+    //  TODO: Refactor this use name instead of fd
     // Parse: If starts with "@fd:", send to specific; else broadcast
     size_t pos = line.find("@");
     if (pos == 0 && line.size() > 1) {
@@ -36,7 +37,7 @@ void networking::ServerStdinHandler::handle(int fd, event_t events) {
                 int target_fd = std::stoi(fd);
                 auto it = client_handlers_.find(target_fd);
                 if (it != client_handlers_.end()) {
-                    std::string full_msg = "Server to " + std::to_string(target_fd) + " :" + msg + "\n";
+                    std::string full_msg = "[Sever] Server to " + std::to_string(target_fd) + " :" + msg + "\n";
                     NetworkUtility::write(target_fd, full_msg.data(), full_msg.size());
                     std::cout << "[Server] Sent to fd=" << target_fd << ": " << msg << std::endl;
                 }
@@ -53,7 +54,7 @@ void networking::ServerStdinHandler::handle(int fd, event_t events) {
     }
     //  Broadcast
     else {
-        std::string full_msg = "Broadcast: " + line + "\n";
+        std::string full_msg = "[Sever] Broadcast: " + line + "\n";
         bool sent_any = false;
         for (const auto& [fd, _] : client_handlers_) {
             ssize_t bytes_written = NetworkUtility::write(fd, full_msg.data(), sizeof(full_msg));

@@ -19,8 +19,8 @@ namespace networking {
 
         virtual void attach(std::shared_ptr<IObserver> obs, std::string room) = 0;
         virtual void detach(std::shared_ptr<IObserver> obs, std::string room) = 0;
-        virtual void notify(std::shared_ptr<IObserver> obs, std::string room) = 0;
-    }
+        virtual void notify(const RoomEvent& event, const std::string& source_name, const std::string& room_id) = 0;
+    };
 }
 
 
