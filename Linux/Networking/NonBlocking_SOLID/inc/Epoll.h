@@ -29,7 +29,7 @@ namespace networking {
         int get_fd() const;
         void add(int fd, event_t event, int user_data = 0);
         void modify(int fd, event_t event);
-        void remove(int fd);
+        void remove(int fd) noexcept;
         size_t wait(std::vector<epoll_event>& events, int timeout = -1);
     private:
         int epoll_fd_ = -1;

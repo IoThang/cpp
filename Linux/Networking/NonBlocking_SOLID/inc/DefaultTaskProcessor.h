@@ -8,6 +8,9 @@
 #include <unordered_map>
 #include <mutex>
 #include <iostream>
+
+#include "ClientInfoFactory.h"
+#include "ClientRegistry.h"
 #include "Task.h"
 #include "NetworkUtility.h"
 
@@ -23,14 +26,14 @@ namespace networking {
 namespace networking {
     class DefaultTaskProcessor : public ITaskProcessor {
     public:
-        explicit DefaultTaskProcessor(std::unordered_map<int, std::string>& client_map);
+        explicit DefaultTaskProcessor(ClientRegistry& registry);
         //  Pass by ref, since copy ctor is deleted
         void process(const Task& task) override;
     private:
-        // Shared state between Client info (e.g., names, with RW lock)
-        std::unordered_map<int, std::string> &clients_;
         // Thread-safe access
         std::shared_mutex mutable clients_mutex;
+        //  Injected
+        ClientRegistry& registry_;
     };
 }
 

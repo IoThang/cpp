@@ -66,10 +66,9 @@ void networking::Epoll::modify(int fd, event_t event) {
     }
 }
 
-void networking::Epoll::remove(int fd) {
-    if (epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, fd, NULL) < 0) {
-        throw std::runtime_error("[ERROR] Failed to delete epoll file descriptor" + std::to_string(errno));
-    }
+void networking::Epoll::remove(int fd) noexcept {
+    //  Don't throw any exception in here
+    epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, fd, NULL) ;
 }
 
 size_t networking::Epoll::wait(std::vector<epoll_event>& events, int timeout) {

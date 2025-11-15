@@ -13,7 +13,10 @@ namespace networking {
         ProcessRecv = 0,
         Broadcast,
         SendSpecific,
-        Cleanup
+        Cleanup,
+        RegisterClient,
+        SetName,
+        JoinRoom
     };
     //  Move-only
     struct Task {

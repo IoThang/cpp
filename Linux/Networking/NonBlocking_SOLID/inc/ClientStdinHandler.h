@@ -7,14 +7,23 @@
 #include "IEventHandler.h"
 #include "Epoll.h"
 #include "NetworkUtility.h"
+#include "ThreadPool.h"
+
+#include <string>
 
 namespace networking {
     class ClientStdinHandler : public IEventHandler{
     public:
         explicit ClientStdinHandler(int fd);
         void handle(int fd, event_t events) override;
+
+        void enterName(int socket_fd);
+        void enterRoom(int socket_fd);
     private:
         int socket_fd_{};
+        //  This flags below are to check the register and the room
+        bool isRegistered_;
+        bool isRoomSet_;
     };
 }
 
