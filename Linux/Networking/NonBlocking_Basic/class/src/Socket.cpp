@@ -31,6 +31,10 @@ Socket& Socket::operator = (Socket&& obj) noexcept {
     return *this;
 }
 
+void Socket::set(int fd) {
+    sock_fd_ = fd;
+}
+
 bool Socket::valid() const {
     return sock_fd_ >= 0;
 }

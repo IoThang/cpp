@@ -14,6 +14,13 @@ Epoll::Epoll() {
     }
 }
 
+Epoll::~Epoll() {
+    if (epoll_fd_ >= 0) {
+        ::close(epoll_fd_);
+    }
+}
+
+
 Epoll::Epoll(Epoll&& obj) noexcept {
     if (this != &obj) {
         epoll_fd_ = obj.epoll_fd_;
