@@ -1,0 +1,106 @@
+@startuml
+!theme plain
+title Class Diagram: Epoll Networking Server & Client
+package "networking" {
+class NetworkUtility {
++setNonBlocking(fd: int)
++createSocket(domain, type, protocol)
++bind(sock, addr, addrlen)
++listen(sock, backlog)
++accept(sock, addr, addrlen)
++connect(sock, addr, addrlen)
++read(fd, buf, count)
++write(fd, buf, count)
++close(fd)
+}
+interface IEventHandler {
++handle(fd: int, events: uint32_t)
+}
+class Socket {
+-fd_: int
++Socket(fd: int)
++Socket(domain, type, protocol)
++~Socket()
++fd(): int
++bindAndListen(port: uint16_t, backlog)
++connectTo(host: string, port: uint16_t)
++accept(): Socket
+}
+class Epoll {
+-epoll_fd_: int
+-MAX_EVENTS: size_t
++Epoll()
++~Epoll()
++fd(): int
++add(fd: int, events: uint32_t, user_data: int)
++modify(fd: int, events: uint32_t)
++remove(fd: int)
++wait(events: vector<epoll_event>, timeout: int): size_t
+}
+' Server Classes
+class ServerHandler {
+-epoll_: Epoll&
+-client_handlers_: unordered_map<int, unique_ptr<IEventHandler>>&
+-server_fd_: int
++handle(fd: int, events: uint32_t)
+}
+class ClientHandler {
++handle(fd: int, events: uint32_t)
+}
+class ServerStdinHandler {
+-client_handlers_: unordered_map<int, unique_ptr<IEventHandler>>&
+-epoll_: Epoll&
++handle(fd: int, events: uint32_t)
+}
+class EpollServer {
+-server_socket_: Socket
+-epoll_: Epoll
+-client_handlers_: unordered_map<int, unique_ptr<IEventHandler>>
+-server_handler_: unique_ptr<IEventHandler>
+-stdin_handler_: unique_ptr<IEventHandler>
++EpollServer()
++run()
+-cleanupFd(fd: int)
+}
+' Client Classes
+class ClientSocketHandler {
++handle(fd: int, events: uint32_t)
+}
+class ClientStdinHandler {
+-socket_fd_: int
++handle(fd: int, events: uint32_t)
+}
+class EpollClient {
+-socket_: Socket
+-epoll_: Epoll
+-socket_handler_: unique_ptr<IEventHandler>
+-stdin_handler_: unique_ptr<IEventHandler>
++EpollClient(host: string, port: uint16_t)
++run()
+}
+' Relationships
+Socket ..> NetworkUtility : uses
+Epoll ..> NetworkUtility : uses
+IEventHandler <|.. ServerHandler
+IEventHandler <|.. ClientHandler
+IEventHandler <|.. ServerStdinHandler
+IEventHandler <|.. ClientSocketHandler
+IEventHandler <|.. ClientStdinHandler
+ServerHandler ..> Epoll : depends
+ServerHandler ..> ClientHandler : creates
+ServerStdinHandler ..> Epoll : depends
+EpollServer *-- Socket : composes
+EpollServer *-- Epoll : composes
+EpollServer o-- IEventHandler : uses (server_handler_)
+EpollServer o-- IEventHandler : uses (stdin_handler_)
+EpollServer *-- unordered_map : has
+EpollClient *-- Socket : composes
+EpollClient *-- Epoll : composes
+EpollClient o-- IEventHandler : uses (socket_handler_)
+EpollClient o-- IEventHandler : uses (stdin_handler_)
+ClientStdinHandler ..> NetworkUtility : uses (write)
+ClientSocketHandler ..> NetworkUtility : uses (read, write)
+}
+note top of EpollServer : Handles broadcast via StdinHandler\nand specific send (@fd:msg)
+note top of EpollClient : Sends messages from stdin\nReceives and prints from server
+@enduml
